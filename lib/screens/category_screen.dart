@@ -20,10 +20,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
     'Currency',
   ];
 
+
+
   @override
   Widget build(BuildContext context) {
-    final List<Category> categories = [];
 
+    final List<Category> categories = [];
     for (int i = 0; i < _categoryNames.length; i++) {
       categories.add(Category(
         name: _categoryNames[i],

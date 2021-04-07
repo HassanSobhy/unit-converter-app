@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:unit_converter/screens/converter_screen.dart';
 
 final double _rowHeight = 75;
 final BorderRadius _borderRadius = BorderRadius.circular(_rowHeight / 2);
@@ -12,7 +13,7 @@ class Category extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Material(
         elevation: 1,
         borderRadius: BorderRadius.circular(20),
@@ -24,7 +25,7 @@ class Category extends StatelessWidget {
             highlightColor: Colors.deepOrange[200],
             splashColor: Colors.deepOrange[200],
             onTap: () {
-              print("I was Tapped");
+              _navigateToConverter(context);
             },
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -51,5 +52,11 @@ class Category extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future _navigateToConverter(BuildContext context) async {
+    await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return ConverterScreen(name: this.name ,);
+    }));
   }
 }
