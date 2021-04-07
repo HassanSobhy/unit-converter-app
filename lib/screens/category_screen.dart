@@ -9,6 +9,7 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
+  List<Category> categories;
   static const _categoryNames = <String>[
     'Length',
     'Area',
@@ -20,19 +21,21 @@ class _CategoryScreenState extends State<CategoryScreen> {
     'Currency',
   ];
 
-
-
   @override
-  Widget build(BuildContext context) {
-
-    final List<Category> categories = [];
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    categories = [];
     for (int i = 0; i < _categoryNames.length; i++) {
       categories.add(Category(
         name: _categoryNames[i],
         icon: Icons.cake,
       ));
     }
-
+  }
+  @override
+  Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: _backgroundColor,
       appBar: _buildAppBar(),
