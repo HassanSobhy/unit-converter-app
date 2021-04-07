@@ -9,6 +9,7 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
+
   List<Category> categories;
   static const _categoryNames = <String>[
     'Length',
@@ -33,15 +34,18 @@ class _CategoryScreenState extends State<CategoryScreen> {
       ));
     }
   }
+
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: _backgroundColor,
       appBar: _buildAppBar(),
       body: _buildCategoryWidgets(categories),
     );
   }
+
+
+
 
   ListView _buildCategoryWidgets(List<Category> categories) {
     return ListView.builder(
