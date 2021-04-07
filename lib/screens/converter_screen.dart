@@ -1,12 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:unit_converter/models/unit.dart';
 import 'package:unit_converter/service/ApiService.dart';
 
 class ConverterScreen extends StatefulWidget {
-  final String name;
-  final List<Unit> units;
+  String name;
+  List<Unit> units;
 
-  const ConverterScreen({this.name , this.units});
+  ConverterScreen({this.name, this.units});
 
   @override
   _ConverterScreenState createState() => _ConverterScreenState();
@@ -19,6 +20,7 @@ class _ConverterScreenState extends State<ConverterScreen> {
   String _convertedValue = '';
   List<DropdownMenuItem> _unitMenuItems;
   bool _showValidationError = false;
+  bool _showErrorUI = false;
 
   @override
   void initState() {
@@ -26,41 +28,47 @@ class _ConverterScreenState extends State<ConverterScreen> {
     _createDropdownMenuItems();
     _setDefaults();
   }
-   static final  _formKey= GlobalKey<FormState>();
+
+  static final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
+      backgroundColor: Colors.deepOrange.shade50,
       appBar: AppBar(
-        title: Text(widget.name),
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Colors.deepOrange.shade50,
+        title: Text(widget.name,style: TextStyle(color: Colors.black),),
       ),
-      body: OrientationBuilder(
-        builder: (context,orientation){
-          if(orientation==Orientation.portrait){
-            return Column(
-              children: [
-                buildInput(),
-                buildArrows(),
-                buildOutput(),
-              ],
-            );
-          } else
-            {
-              return Center(
-                child: Container(
-                  width: 450,
-                  child: ListView(
+      body: !(widget.name == apiCategory['name'] && _showErrorUI)
+          ? OrientationBuilder(
+              builder: (context, orientation) {
+                if (orientation == Orientation.portrait) {
+                  return Column(
                     children: [
                       buildInput(),
                       buildArrows(),
                       buildOutput(),
                     ],
-                  ),
-                ),
-              );
-            }
-        },
-      ),
+                  );
+                } else {
+                  return Center(
+                    child: Container(
+                      width: 450,
+                      child: ListView(
+                        children: [
+                          buildInput(),
+                          buildArrows(),
+                          buildOutput(),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+              },
+            )
+          : showError(),
     );
   }
 
@@ -80,10 +88,15 @@ class _ConverterScreenState extends State<ConverterScreen> {
 
   /// Sets the default values for the 'from' and 'to' [Dropdown]s.
   void _setDefaults() {
+
     setState(() {
       _fromValue = widget.units[0];
       _toValue = widget.units[1];
     });
+
+    if (_inputValue != null) {
+      _updateConversion();
+    }
   }
 
   /// Clean up conversion; trim trailing zeros, e.g. 5.500 -> 5.5, 10.0 -> 10
@@ -108,16 +121,24 @@ class _ConverterScreenState extends State<ConverterScreen> {
       final conversion = await api.convert(apiCategory['route'],
           _inputValue.toString(), _fromValue.name, _toValue.name);
 
-      setState(() {
-        _convertedValue = _format(conversion);
-      });
-    } else
-      {
+      // API error or not connected to the internet
+      if (conversion == null) {
         setState(() {
-          _convertedValue =
-              _format(_inputValue * (_toValue.conversion / _fromValue.conversion));
+          _showErrorUI = true;
+        });
+      } else {
+        setState(() {
+          _showErrorUI = false;
+          _convertedValue = _format(conversion);
         });
       }
+    } else {
+      // For the static units, we do the conversion ourselves
+      setState(() {
+        _convertedValue = _format(
+            _inputValue * (_toValue.conversion / _fromValue.conversion));
+      });
+    }
   }
 
   void _updateInputValue(String input) {
@@ -196,14 +217,12 @@ class _ConverterScreenState extends State<ConverterScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: DropdownButtonFormField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder()
-          ),
-          value: currentValue,
-          items: _unitMenuItems,
-          onChanged: onChanged,
-          style: Theme.of(context).textTheme.title,
-        ),
+        decoration: InputDecoration(border: OutlineInputBorder()),
+        value: currentValue,
+        items: _unitMenuItems,
+        onChanged: onChanged,
+        style: Theme.of(context).textTheme.title,
+      ),
     );
   }
 
@@ -220,7 +239,9 @@ class _ConverterScreenState extends State<ConverterScreen> {
               border: OutlineInputBorder(),
             ),
             keyboardType: TextInputType.number,
-            onChanged: (value ){_updateInputValue(value);},
+            onChanged: (value) {
+              _updateInputValue(value);
+            },
           ),
           _createDropdown(_fromValue.name, _updateFromConversion)
         ],
@@ -244,7 +265,7 @@ class _ConverterScreenState extends State<ConverterScreen> {
       child: Column(
         children: [
           TextFormField(
-            controller: TextEditingController()..text=_convertedValue,
+            controller: TextEditingController()..text = _convertedValue,
             decoration: InputDecoration(
               labelText: "Output",
               border: OutlineInputBorder(),
@@ -253,6 +274,37 @@ class _ConverterScreenState extends State<ConverterScreen> {
           ),
           _createDropdown(_toValue.name, _updateToConversion),
         ],
+      ),
+    );
+  }
+
+  Widget showError() {
+    return SingleChildScrollView(
+      child: Container(
+        margin: EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16.0),
+          color: Colors.red,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline,
+              size: 180.0,
+              color: Colors.white,
+            ),
+            Text(
+              "Oh no! We can't connect right now!",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headline.copyWith(
+                    color: Colors.white,
+                  ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -43,17 +43,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (categories.isEmpty) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    } else {
       return Scaffold(
         backgroundColor: _backgroundColor,
         appBar: _buildAppBar(),
-        body: _buildCategoryWidgets(categories),
+        body: categories.isEmpty?  Center(
+          child: CircularProgressIndicator(),
+        ): _buildCategoryWidgets(categories),
       );
-    }
+
   }
 
   Future<void> _retrieveLocalCategories() async {
