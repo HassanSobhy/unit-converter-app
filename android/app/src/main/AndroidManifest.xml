@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.unit_converter">
    <application
-        android:label="unit_converter"
+        android:label="Unit Converter"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
