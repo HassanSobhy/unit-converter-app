@@ -33,13 +33,32 @@ class _ConverterScreenState extends State<ConverterScreen> {
       appBar: AppBar(
         title: Text(widget.name),
       ),
-      body: Column(
-
-        children: [
-          buildInput(),
-          buildArrows(),
-          buildOutput(),
-        ],
+      body: OrientationBuilder(
+        builder: (context,orientation){
+          if(orientation==Orientation.portrait){
+            return Column(
+              children: [
+                buildInput(),
+                buildArrows(),
+                buildOutput(),
+              ],
+            );
+          } else
+            {
+              return Center(
+                child: Container(
+                  width: 450,
+                  child: ListView(
+                    children: [
+                      buildInput(),
+                      buildArrows(),
+                      buildOutput(),
+                    ],
+                  ),
+                ),
+              );
+            }
+        },
       ),
     );
   }

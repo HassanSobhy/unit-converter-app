@@ -9,7 +9,6 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
-
   List<Category> categories;
   static const _categoryNames = <String>[
     'Length',
@@ -44,15 +43,25 @@ class _CategoryScreenState extends State<CategoryScreen> {
     );
   }
 
-
-
-
-  ListView _buildCategoryWidgets(List<Category> categories) {
-    return ListView.builder(
-        itemCount: categories.length,
-        itemBuilder: (context, index) {
-          return categories[index];
-        });
+  Widget _buildCategoryWidgets(List<Category> categories) {
+    if (MediaQuery.of(context).orientation == Orientation.portrait) {
+      return ListView.builder(
+          itemCount: categories.length,
+          itemBuilder: (context, index) {
+            return categories[index];
+          });
+    } else {
+      return GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 4,
+            crossAxisSpacing: 4,
+            childAspectRatio: 3
+          ),itemCount: categories.length,
+          itemBuilder: (context, index) {
+            return categories[index];
+          });
+    }
   }
 
   AppBar _buildAppBar() {
