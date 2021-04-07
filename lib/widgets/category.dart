@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:unit_converter/models/unit.dart';
 import 'package:unit_converter/screens/converter_screen.dart';
 
 final double _rowHeight = 75;
@@ -7,8 +8,9 @@ final BorderRadius _borderRadius = BorderRadius.circular(_rowHeight / 2);
 class Category extends StatelessWidget {
   final String name;
   final IconData icon;
+  final List<Unit> units;
 
-  const Category({this.name, this.icon});
+  const Category({this.name, this.icon , this.units});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +58,7 @@ class Category extends StatelessWidget {
 
   Future _navigateToConverter(BuildContext context) async {
     await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return ConverterScreen(name: this.name ,);
+      return ConverterScreen(name: this.name , units:units);
     }));
   }
 }

@@ -3,15 +3,15 @@ import 'package:unit_converter/models/unit.dart';
 
 class ConverterScreen extends StatefulWidget {
   final String name;
+  final List<Unit> units;
 
-  const ConverterScreen({this.name});
+  const ConverterScreen({this.name , this.units});
 
   @override
   _ConverterScreenState createState() => _ConverterScreenState();
 }
 
 class _ConverterScreenState extends State<ConverterScreen> {
-  List<Unit> units;
   Unit _fromValue;
   Unit _toValue;
   double _inputValue;
@@ -22,13 +22,13 @@ class _ConverterScreenState extends State<ConverterScreen> {
   @override
   void initState() {
     super.initState();
-    units = _retrieveUnitList(widget.name);
     _createDropdownMenuItems();
     _setDefaults();
   }
-
+   static final  _formKey= GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.name),
@@ -80,8 +80,8 @@ class _ConverterScreenState extends State<ConverterScreen> {
   /// Sets the default values for the 'from' and 'to' [Dropdown]s.
   void _setDefaults() {
     setState(() {
-      _fromValue = units[0];
-      _toValue = units[1];
+      _fromValue = widget.units[0];
+      _toValue = widget.units[1];
     });
   }
 
@@ -129,7 +129,7 @@ class _ConverterScreenState extends State<ConverterScreen> {
   }
 
   Unit _getUnit(String unitName) {
-    return units.firstWhere(
+    return widget.units.firstWhere(
       (Unit unit) {
         return unit.name == unitName;
       },
@@ -164,7 +164,7 @@ class _ConverterScreenState extends State<ConverterScreen> {
   /// Creates fresh list of [DropdownMenuItem] widgets, given a list of [Unit]s.
   void _createDropdownMenuItems() {
     var newItems = <DropdownMenuItem>[];
-    for (var unit in units) {
+    for (var unit in widget.units) {
       newItems.add(DropdownMenuItem(
         value: unit.name,
         child: Container(
@@ -198,6 +198,7 @@ class _ConverterScreenState extends State<ConverterScreen> {
   Padding buildInput() {
     return Padding(
       padding: EdgeInsets.all(16),
+      key: _formKey,
       child: Column(
         children: [
           TextFormField(
@@ -207,7 +208,7 @@ class _ConverterScreenState extends State<ConverterScreen> {
               border: OutlineInputBorder(),
             ),
             keyboardType: TextInputType.number,
-            onChanged: _updateInputValue,
+            onChanged: (value ){_updateInputValue(value);},
           ),
           _createDropdown(_fromValue.name, _updateFromConversion)
         ],
@@ -231,12 +232,12 @@ class _ConverterScreenState extends State<ConverterScreen> {
       child: Column(
         children: [
           TextFormField(
+            controller: TextEditingController()..text=_convertedValue,
             decoration: InputDecoration(
               labelText: "Output",
               border: OutlineInputBorder(),
             ),
             keyboardType: TextInputType.number,
-            onChanged: null,
           ),
           _createDropdown(_toValue.name, _updateToConversion),
         ],

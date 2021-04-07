@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:unit_converter/models/unit.dart';
 import '../widgets/category.dart';
 
 final _backgroundColor = Colors.deepOrange[100];
@@ -26,12 +29,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
     // TODO: implement initState
     super.initState();
     categories = [];
-    for (int i = 0; i < _categoryNames.length; i++) {
-      categories.add(Category(
-        name: _categoryNames[i],
-        icon: Icons.cake,
-      ));
-    }
+
+    _retrieveLocalCategories();
   }
 
   @override
@@ -41,6 +40,35 @@ class _CategoryScreenState extends State<CategoryScreen> {
       appBar: _buildAppBar(),
       body: _buildCategoryWidgets(categories),
     );
+  }
+
+
+  Future<void> _retrieveLocalCategories() async {
+    // Consider omitting the types for local variables. For more details on Effective
+    // Dart Usage, see https://www.dartlang.org/guides/language/effective-dart/usage
+    final json = DefaultAssetBundle
+        .of(context)
+        .loadString('assets/data/regular_units.json');
+    final data = JsonDecoder().convert(await json);
+    if (data is! Map) {
+      throw ('Data retrieved from API is not a Map');
+    }
+    var categoryIndex = 0;
+    data.keys.forEach((key) {
+      final List<Unit> units =
+      data[key].map<Unit>((dynamic data) => Unit.fromJson(data)).toList();
+
+      var category = Category(
+        name: key,
+        icon: Icons.cake,
+        units : units,
+      );
+      setState(() {
+        categories.add(category);
+      });
+      categoryIndex += 1;
+    });
+
   }
 
   Widget _buildCategoryWidgets(List<Category> categories) {
