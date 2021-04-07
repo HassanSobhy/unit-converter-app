@@ -7,7 +7,7 @@ final BorderRadius _borderRadius = BorderRadius.circular(_rowHeight / 2);
 
 class Category extends StatelessWidget {
   final String name;
-  final IconData icon;
+  final String icon;
   final List<Unit> units;
 
   const Category({this.name, this.icon , this.units});
@@ -35,10 +35,7 @@ class Category extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.all(8),
-                    child: Icon(
-                      icon,
-                      size: 30,
-                    ),
+                    child: Image.asset(icon)
                   ),
                   Center(
                       child: Text(

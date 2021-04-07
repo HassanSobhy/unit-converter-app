@@ -203,7 +203,7 @@ class _ConverterScreenState extends State<ConverterScreen> {
         children: [
           TextFormField(
             decoration: InputDecoration(
-              errorText: _showValidationError ? "Invaild number entered" : null,
+              errorText: _showValidationError ? "Invalid number entered" : null,
               labelText: "Input",
               border: OutlineInputBorder(),
             ),

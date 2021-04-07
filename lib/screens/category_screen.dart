@@ -13,16 +13,16 @@ class CategoryScreen extends StatefulWidget {
 
 class _CategoryScreenState extends State<CategoryScreen> {
   List<Category> categories;
-  static const _categoryNames = <String>[
-    'Length',
-    'Area',
-    'Volume',
-    'Mass',
-    'Time',
-    'Digital Storage',
-    'Energy',
-    'Currency',
-  ];
+  static const _icons = {
+    'Length': 'assets/icons/length.png',
+    'Area': 'assets/icons/area.png',
+    'Volume': 'assets/icons/volume.png',
+    'Mass': 'assets/icons/mass.png',
+    'Time': 'assets/icons/time.png',
+    'Digital Storage': 'assets/icons/digital_storage.png',
+    'Energy': 'assets/icons/power.png',
+    'Currency': 'assets/icons/currency.png',
+  };
 
   @override
   void initState() {
@@ -60,7 +60,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
       var category = Category(
         name: key,
-        icon: Icons.cake,
+        icon: _icons[key],
         units : units,
       );
       setState(() {

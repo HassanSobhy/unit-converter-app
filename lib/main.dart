@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Unit Converter',
       theme: ThemeData(
+        fontFamily: 'Raleway',
         primarySwatch: Colors.deepOrange,
       ),
       home: CategoryScreen(),
