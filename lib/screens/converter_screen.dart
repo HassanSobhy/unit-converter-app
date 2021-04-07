@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:unit_converter/models/unit.dart';
+import 'package:unit_converter/service/ApiService.dart';
 
 class ConverterScreen extends StatefulWidget {
   final String name;
@@ -101,11 +102,22 @@ class _ConverterScreenState extends State<ConverterScreen> {
     return outputNum;
   }
 
-  void _updateConversion() {
-    setState(() {
-      _convertedValue =
-          _format(_inputValue * (_toValue.conversion / _fromValue.conversion));
-    });
+  void _updateConversion() async {
+    if (widget.name == apiCategory['name']) {
+      final api = ApiService();
+      final conversion = await api.convert(apiCategory['route'],
+          _inputValue.toString(), _fromValue.name, _toValue.name);
+
+      setState(() {
+        _convertedValue = _format(conversion);
+      });
+    } else
+      {
+        setState(() {
+          _convertedValue =
+              _format(_inputValue * (_toValue.conversion / _fromValue.conversion));
+        });
+      }
   }
 
   void _updateInputValue(String input) {
