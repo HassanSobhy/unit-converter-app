@@ -1,16 +1,13 @@
-# unit_converter
+# Unit Converter App
 
-A new Flutter application.
 
-## Getting Started
+* File structure that separates `widgets`, `screens`, `model`, `service` and infrastructure classes.
+* Use of a real [API](https://flutter.udacity.com) for currency conversion rates.
+* A custom app name and launcher icon.
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Screenshots
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+![Screenshot_20210407-225735](https://user-images.githubusercontent.com/29752112/113939385-39ab1c00-97fc-11eb-89df-8097a4070caa.png) ![Screenshot_20210407-225743](https://user-images.githubusercontent.com/29752112/113939485-5c3d3500-97fc-11eb-927f-aa649e120ec9.png)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
